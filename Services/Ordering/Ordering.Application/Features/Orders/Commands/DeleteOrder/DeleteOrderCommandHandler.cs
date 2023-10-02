@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Ordering.Application.Contracts.Persistence;
 using Ordering.Application.Exceptions;
+using Ordering.Application.Features.Orders.Commands.UpdateOrder;
 using Ordering.Domain.Enities;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Ordering.Application.Features.Orders.Commands.DeleteOrder
 {
-    public class DeleteOrderCommandHandler
+    public class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderCommand>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
