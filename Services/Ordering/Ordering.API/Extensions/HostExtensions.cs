@@ -46,7 +46,10 @@ namespace Ordering.API.HostExtensions
                                                     IServiceProvider services)
                                                     where TContext : DbContext
         {
-            context.Database.Migrate();
+            if (!context.Database.CanConnect())
+            {
+                context.Database.Migrate();
+            }
             seeder(context, services);
         }
     }

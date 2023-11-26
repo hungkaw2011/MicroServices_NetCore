@@ -1,0 +1,23 @@
+{
+  "Routes": [
+    //API mapping -- https://localhost:5001/api/Discount/{abc}
+    {
+      "DownstreamPathTemplate": "/api/Discount/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Discount/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdentityApiKey",
+        "AllowedScopes": []
+      },
+      "UseHttps": true,
+      "DangerousAcceptAnyServerCertificateValidator": true
+    }
+  ]
+}

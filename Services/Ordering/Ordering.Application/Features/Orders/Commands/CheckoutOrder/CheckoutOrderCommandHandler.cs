@@ -35,7 +35,6 @@ namespace Ordering.Application.Features.Orders.Commands.CheckoutOrder
         {
             var orderEntity = _mapper.Map<Order>(request);
             var newOrder = await _orderRepository.AddAsync(orderEntity);
-
 #pragma warning disable CA2254 // Template should be a static expression
             _logger.LogInformation($"Order {newOrder.Id} is successfully created.");
 

@@ -1,6 +1,7 @@
 using Discount.API.Extensions;
 using Discount.API.Repositories;
 using Discount.API.Repositories.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IDiscountRepository,DiscountRepository>();
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = "https://localhost:5005";
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false
+        };
+    });
+builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("ClientIdPolicy", policy => policy.RequireClaim("client_id", "discountClient", "discountAPI"));
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -22,7 +36,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

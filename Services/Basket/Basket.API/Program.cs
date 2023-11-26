@@ -1,8 +1,9 @@
-using Basket.API.GrpcServices;
+﻿using Basket.API.GrpcServices;
 using Basket.API.Mapper;
 using Basket.API.Repositories.Interfaces;
 using Discount.Grpc.Protos;
 using MassTransit;
+using Microsoft.Extensions.Configuration;
 using System.Reflection.PortableExecutable;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddStackExchangeRedisCache(options=>
 {
-    options.Configuration = builder.Configuration.GetValue<string>("CacheSettings:ConnectionString");
+    options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions
+    {
+        AsyncTimeout = 30000, // Timeout cho các tương tác Redis
+        SyncTimeout = 30000,  // Timeout cho các tương tác Redis đồng bộ
+        EndPoints = { builder.Configuration.GetValue<string>("CacheSettings:RedisServer"), builder.Configuration.GetValue<string>("CacheSettings:RedisPort") },
+    };
 });
 builder.Services.AddScoped<IBasketRepository, BasketRepository>(); 
 builder.Services.AddAutoMapper(typeof(BasketProfile));

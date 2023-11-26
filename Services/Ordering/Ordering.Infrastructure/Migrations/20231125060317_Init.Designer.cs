@@ -12,7 +12,7 @@ using Ordering.Infrastructure.Persistence;
 namespace Ordering.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20231002160722_Init")]
+    [Migration("20231125060317_Init")]
     partial class Init
     {
         /// <inheritdoc />

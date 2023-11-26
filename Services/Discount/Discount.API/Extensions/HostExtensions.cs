@@ -12,7 +12,7 @@ namespace Discount.API.Extensions
 
             try
             {
-                logger!.LogInformation("Migrating postgresql database.");
+                logger!.LogInformation("Migrating postgresql database1.");
 
                 logger!.LogInformation(configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
 

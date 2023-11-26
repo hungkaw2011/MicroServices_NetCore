@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Ordering.Domain.Enities;
 using System;
 using System.Collections.Generic;
@@ -12,19 +13,28 @@ namespace Ordering.Infrastructure.Persistence
     {
         public static async Task SeedAsync(OrderContext orderContext, ILogger<OrderContextSeed> logger)
         {
-            if (!orderContext.Orders.Any())
+            try
             {
-                orderContext.Orders.AddRange(GetPreconfiguredOrders());
-                await orderContext.SaveChangesAsync();
-                logger.LogInformation("Seed database associated with context {DbContextName}", typeof(OrderContext).Name);
+                if (!orderContext.Orders.Any())
+                {
+                    orderContext.Orders.AddRange(GetPreconfiguredOrders());
+                    await orderContext.SaveChangesAsync();
+                    logger.LogInformation("Seed database associated with context {DbContextName}", typeof(OrderContext).Name);
+                }
             }
+            catch (Exception) { }
         }
 
         private static IEnumerable<Order> GetPreconfiguredOrders()
         {
             return new List<Order>
             {
-                new Order() {UserName = "swn", FirstName = "Mehmet", LastName = "Ozkaya", EmailAddress = "ezozkme@gmail.com", AddressLine = "Bahcelievler", Country = "Turkey", TotalPrice = 350 }
+                new Order() {UserName = "Hùng", FirstName = "Nguyễn", LastName = "", EmailAddress = "hungqaz38@gmail.com",
+                    AddressLine = "Hà Tĩnh", Country = "VN", TotalPrice = 350,CVV="",CardName="",CardNumber="",
+                    Expiration = "",State = "",ZipCode= "",PaymentMethod=0},
+                new Order() {UserName = "Hùng", FirstName = "Nguyễn", LastName = "", EmailAddress = "hungqaz38@gmail.com",
+                    AddressLine = "Hà Tĩnh", Country = "VN", TotalPrice = 350,CVV="",CardName="",CardNumber="",
+                    Expiration = "",State = "",ZipCode= "",PaymentMethod=0}
             };
         }
     }

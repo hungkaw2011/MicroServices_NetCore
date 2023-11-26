@@ -1,5 +1,6 @@
 ﻿using Discount.API.Entities;
 using Discount.API.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

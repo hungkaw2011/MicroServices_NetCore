@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Ordering.Application.Contracts.Infrastructure;
 using Ordering.Application.Models;
@@ -14,31 +15,33 @@ namespace Ordering.Infrastructure.Mail
 {
     public class EmailService : IEmailService
     {
-        public EmailSettings _emailSettings { get; }
         public ILogger<EmailService> _logger { get; }
-
-        public EmailService(IOptions<EmailSettings> emailSettings, ILogger<EmailService> logger)
+        public IConfiguration _configuration { get; }
+        public EmailService( ILogger<EmailService> logger, IConfiguration configuration)
         {
-            _emailSettings = emailSettings.Value;
+            _configuration = configuration;
             _logger = logger;
         }
 
         public async Task<bool> SendEmail(Email email)
         {
-            string SendersAddress = _emailSettings.FromAddress;
-            string SendersPassword = _emailSettings.Password;
-
+            EmailSettings emailSettings = new EmailSettings
+            {
+                FromAddress= _configuration.GetSection("EmailSettings")["FromAddress"]!,
+                Password= _configuration.GetSection("EmailSettings")["Password"]!
+            };
             SmtpClient smtp = new SmtpClient
             {
+                UseDefaultCredentials = false,
                 Host = "smtp.gmail.com",
                 Port = 587,
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
-                Credentials = new NetworkCredential(SendersAddress, SendersPassword),
+                Credentials = new NetworkCredential(emailSettings.FromAddress, emailSettings.Password),
                 Timeout = 1000
             };
 
-            MailMessage message = new MailMessage(SendersAddress, email.To, email.Subject, email.Body);
+            MailMessage message = new MailMessage(emailSettings.FromAddress, email.To, email.Subject, email.Body);
             message.IsBodyHtml = true;
             await smtp.SendMailAsync(message);
             return true;
