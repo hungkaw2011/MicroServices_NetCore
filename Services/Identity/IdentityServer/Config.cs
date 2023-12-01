@@ -1,8 +1,9 @@
 ﻿using IdentityModel;
-using IdentityServer4.Models;
-using IdentityServer4.Test;
-using IdentityServer4;
 using System.Security.Claims;
+using static System.Net.WebRequestMethods;
+using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Test;
+using Duende.IdentityServer;
 
 namespace IdentityServer
 {
@@ -23,14 +24,14 @@ namespace IdentityServer
                    },
                    new Client
                    {
-                       ClientId = "Webapp_mvc_client",
-                       ClientName = "Webapp MVC Web App",
+                       ClientId = "webapp_mvc_client",
+                       ClientName = "MVC Web App",
                        AllowedGrantTypes = GrantTypes.Hybrid,
                        RequirePkce = false,
                        AllowRememberConsent = false,
                        RedirectUris = new List<string>()
                        {
-                           "https://localhost:5002/signin-oidc"
+                           "https://localhost:5002/signin-oidc",
                        },
                        PostLogoutRedirectUris = new List<string>()
                        {
@@ -38,7 +39,7 @@ namespace IdentityServer
                        },
                        ClientSecrets = new List<Secret>
                        {
-                           new Secret("secret".Sha256())
+                           new Secret("toiyeuem_secret".Sha256())
                        },
                        AllowedScopes = new List<string>
                        {
@@ -61,7 +62,7 @@ namespace IdentityServer
         public static IEnumerable<ApiResource> ApiResources =>
           new ApiResource[]
           {
-               new ApiResource("discountAPI", "Discount API")
+               new ApiResource("discountAPI", "Discount API"),
           };
 
         public static IEnumerable<IdentityResource> IdentityResources =>
@@ -76,21 +77,5 @@ namespace IdentityServer
                     "Your role(s)",
                     new List<string>() { "role" })
           };
-
-        public static List<TestUser> TestUsers =>
-            new List<TestUser>
-            {
-                new TestUser
-                {
-                    SubjectId = "5BE86359-073C-434B-AD2D-A3932222DABE",
-                    Username = "hungka",
-                    Password = "swn",
-                    Claims = new List<Claim>
-                    {
-                        new Claim(JwtClaimTypes.GivenName, "hung"),
-                        new Claim(JwtClaimTypes.FamilyName, "nguyen")
-                    }
-                }
-            };
     }
 }

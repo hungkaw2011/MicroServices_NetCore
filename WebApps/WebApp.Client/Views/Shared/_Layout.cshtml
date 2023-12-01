@@ -25,6 +25,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Discount" asp-action="Index">Discount</a>
                         </li>
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Discount" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Discount" asp-action="OnlyAdmin">Only Admin Page</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

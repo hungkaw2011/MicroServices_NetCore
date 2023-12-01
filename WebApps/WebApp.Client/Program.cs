@@ -14,10 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IDiscountApiService, DiscountApiService>();
+builder.Services.AddTransient<AuthenticationDelegatingHandler>();
 
 // http operations
-// 1 create an HttpClient used for accessing the Movies.API
-builder.Services.AddTransient<AuthenticationDelegatingHandler>();
+// 1 create an HttpClient used for accessing the Discount.API
 builder.Services.AddHttpClient("DiscountAPIClient", client =>
 {
     client.BaseAddress = new Uri("https://localhost:5010/"); // API GATEWAY URL
@@ -27,13 +27,19 @@ builder.Services.AddHttpClient("DiscountAPIClient", client =>
 // 2 create an HttpClient used for accessing the IDP
 builder.Services.AddHttpClient("IDPClient", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:5005/"); //Identity URL
+    client.BaseAddress = new Uri("https://localhost:5005/"); //Identity Provider URL
     client.DefaultRequestHeaders.Clear();
     client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
 });
 
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddSingleton(new ClientCredentialsTokenRequest
+{
+    Address = "https://localhost:5005/connect/token",
+    ClientId = "discountClient",
+    ClientSecret = "toiyeuem_secret",
+    Scope = "discountAPI"
+});
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -44,10 +50,9 @@ builder.Services.AddAuthentication(options =>
     {
         options.Authority = "https://localhost:5005";
 
-        options.ClientId = "Webapp_mvc_client";
-        options.ClientSecret = "secret";
+        options.ClientId = "webapp_mvc_client";
+        options.ClientSecret = "toiyeuem_secret";
         options.ResponseType = "code id_token";
-
         //options.Scope.Add("openid");
         //options.Scope.Add("profile");
         options.Scope.Add("address");
@@ -59,8 +64,7 @@ builder.Services.AddAuthentication(options =>
         options.ClaimActions.DeleteClaim("s_hash");
         options.ClaimActions.DeleteClaim("auth_time");
         options.ClaimActions.MapUniqueJsonKey("role", "role");
-
-        options.Scope.Add("movieAPI");
+        options.Scope.Add("discountAPI");
 
         options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
@@ -71,13 +75,7 @@ builder.Services.AddAuthentication(options =>
             RoleClaimType = JwtClaimTypes.Role
         };
     });
-builder.Services.AddSingleton(new ClientCredentialsTokenRequest
-{
-    Address = "https://localhost:5005/connect/token",
-    ClientId = "discountClient",
-    ClientSecret = "toiyeuem_secret",
-    Scope = "discountAPI"
-});
+
 
 var app = builder.Build();
 
@@ -93,7 +91,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -1,34 +1,46 @@
-using IdentityServer4.Test;
-using IdentityServer4.Models;
 using IdentityServer;
+using IdentityServerAspNetIdentity;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+Log.Information("Starting up");
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddAuthorization();
-builder.Services.AddControllersWithViews();
-
-builder.Services.AddIdentityServer()
-    .AddInMemoryClients(Config.Clients)
-    .AddInMemoryApiScopes(Config.ApiScopes)
-    .AddInMemoryApiResources(Config.ApiResources)
-    .AddInMemoryIdentityResources(Config.IdentityResources)
-    .AddTestUsers(Config.TestUsers)
-    .AddDeveloperSigningCredential();
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseDeveloperExceptionPage();
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Host.UseSerilog((ctx, lc) => lc
+        .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
+        .Enrich.FromLogContext()
+        .ReadFrom.Configuration(ctx.Configuration));
+
+    var app = builder
+        .ConfigureServices()
+        .ConfigurePipeline();
+    if (args.Contains("/seed"))
+    {
+        Log.Information("Seeding database...");
+        SeedData.EnsureSeedData(app);
+        Log.Information("Done seeding database. Exiting.");
+    }
+
+    app.Run();
 }
-app.UseDeveloperExceptionPage();
-
-app.UseStaticFiles();
-app.UseRouting();
-
-app.UseIdentityServer();
-app.UseAuthorization();
-
-app.MapDefaultControllerRoute();
-app.Run();
+catch (Exception ex)
+    when (
+        // https://github.com/dotnet/runtime/issues/60600
+        ex.GetType().Name is not "StopTheHostException"
+        // HostAbortedException was added in .NET 7, but since we target .NET 6 we
+        // need to do it this way until we target .NET 8
+        && ex.GetType().Name is not "HostAbortedException"
+   )
+{
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
+}

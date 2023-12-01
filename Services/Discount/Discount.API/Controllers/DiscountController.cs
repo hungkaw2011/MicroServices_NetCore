@@ -9,6 +9,7 @@ namespace Discount.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize("ClientIdPolicy")] 
     public class DiscountController : ControllerBase
     {
         private readonly IDiscountRepository _repository;

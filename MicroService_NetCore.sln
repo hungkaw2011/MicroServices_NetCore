@@ -52,7 +52,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApps", "WebApps", "{0A4A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp.Client", "WebApps\WebApp.Client\WebApp.Client.csproj", "{8E569FE4-E931-40BD-ADF1-9B07A064F47D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount.API", "Services\Discount\Discount.API\Discount.API.csproj", "{2367C1AC-3A35-4587-B7B8-12B6CCF6A994}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount.API", "Services\Discount\Discount.API\Discount.API.csproj", "{2367C1AC-3A35-4587-B7B8-12B6CCF6A994}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealtimeChatService", "Services\Chat\RealtimeChatService\RealtimeChatService.csproj", "{1CB59FC4-8392-4DDD-A546-696337ABD637}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -112,6 +114,10 @@ Global
 		{2367C1AC-3A35-4587-B7B8-12B6CCF6A994}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2367C1AC-3A35-4587-B7B8-12B6CCF6A994}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2367C1AC-3A35-4587-B7B8-12B6CCF6A994}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CB59FC4-8392-4DDD-A546-696337ABD637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CB59FC4-8392-4DDD-A546-696337ABD637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CB59FC4-8392-4DDD-A546-696337ABD637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CB59FC4-8392-4DDD-A546-696337ABD637}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -136,6 +142,7 @@ Global
 		{784A7EE6-3276-410B-801F-244C8491EE05} = {6112338C-2A94-46FB-91D9-456A9AB0D99B}
 		{8E569FE4-E931-40BD-ADF1-9B07A064F47D} = {0A4A425A-1625-4145-B919-333AC2A8A44F}
 		{2367C1AC-3A35-4587-B7B8-12B6CCF6A994} = {0F7DB7B9-856D-4CA8-8F4D-2E15EFCDCE65}
+		{1CB59FC4-8392-4DDD-A546-696337ABD637} = {3BDDE13E-E076-4063-983E-BD1493604697}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F1266B3-7FD1-455D-9760-1BE2A0C477CB}
