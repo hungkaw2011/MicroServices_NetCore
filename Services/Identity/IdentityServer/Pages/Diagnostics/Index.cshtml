@@ -1,4 +1,4 @@
-@page
+﻿@page
 @model IdentityServerHost.Pages.Diagnostics.Index
 
 <div class="diagnostics-page">
@@ -59,3 +59,10 @@
         </div>
     </div>
 </div>
+<script>
+    function loginSuccess() {
+        // Gửi thông điệp đóng cửa sổ và chuyển hướng
+        window.opener.postMessage('login-success', 'http://localhost:5002');
+        window.close();
+    }
+</script>

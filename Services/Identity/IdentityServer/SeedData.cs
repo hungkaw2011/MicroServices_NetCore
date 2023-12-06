@@ -10,13 +10,31 @@ namespace IdentityServerAspNetIdentity;
 
 public class SeedData
 {
-    public static void EnsureSeedData(WebApplication app)
+    private static async Task CreateRoles(IServiceProvider serviceProvider)
+    {
+        var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+        IdentityResult adminRoleResult, userRoleResult;
+        bool adminRoleExists = await RoleManager.RoleExistsAsync("Admin");
+        bool userRoleExists = await RoleManager.RoleExistsAsync("User");
+
+        if (!adminRoleExists)
+        {
+            adminRoleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+            userRoleResult = await RoleManager.CreateAsync(new IdentityRole("User"));
+        }
+
+        ApplicationUser userToMakeAdmin = await UserManager.FindByNameAsync("hungka11");
+        await UserManager.AddToRoleAsync(userToMakeAdmin, "Admin");
+    }
+    public static async void EnsureSeedData(WebApplication app)
     {
         using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
             context!.Database.Migrate();
-
+            await CreateRoles(serviceProvider:scope.ServiceProvider);
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var alice = userMgr.FindByNameAsync("alice").Result;
             if (alice == null)

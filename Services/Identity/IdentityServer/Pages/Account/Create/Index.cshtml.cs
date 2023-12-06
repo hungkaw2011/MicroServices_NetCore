@@ -26,7 +26,8 @@ public class Index : PageModel
     private readonly IEventService _events;
     [BindProperty]
     public InputModel Input { get; set; }
-        
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public Index(
         IIdentityServerInteractionService interaction,
         UserManager<ApplicationUser> userManager,
@@ -94,11 +95,12 @@ public class Index : PageModel
                 var result = _userManager.CreateAsync(user, Input.Password).Result;
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "User");
                     result = await _userManager.AddClaimsAsync(user, new Claim[]{
                             new Claim(JwtClaimTypes.Name, user.UserName),
                             new Claim(JwtClaimTypes.GivenName, user.UserName.Split(" ")[0]),
                             new Claim(JwtClaimTypes.Email, user.Email),
-                            new Claim("location", "somewhere")
+                            new Claim("location", "somewhere"),
                         });
                 }
                 else

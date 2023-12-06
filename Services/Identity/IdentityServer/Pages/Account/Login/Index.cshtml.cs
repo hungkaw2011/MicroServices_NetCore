@@ -26,7 +26,8 @@ public class Index : PageModel
         
     [BindProperty]
     public InputModel Input { get; set; }
-        
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public Index(
         IIdentityServerInteractionService interaction,
         IAuthenticationSchemeProvider schemeProvider,
@@ -152,11 +153,11 @@ public class Index : PageModel
                 EnableLocalLogin = local,
             };
 
-            Input.Username = context?.LoginHint;
+            Input.Username = context?.LoginHint!;
 
             if (!local)
             {
-                View.ExternalProviders = new[] { new ViewModel.ExternalProvider { AuthenticationScheme = context.IdP } };
+                View.ExternalProviders = new[] { new ViewModel.ExternalProvider { AuthenticationScheme = context!.IdP } };
             }
 
             return;
@@ -177,7 +178,7 @@ public class Index : PageModel
             .Select(x => new ViewModel.ExternalProvider
             {
                 AuthenticationScheme = x.Scheme,
-                DisplayName = x.DisplayName
+                DisplayName = x.DisplayName!
             });
         providers.AddRange(dyanmicSchemes);
 

@@ -1,14 +1,17 @@
-using IdentityModel;
+﻿using IdentityModel;
 using IdentityModel.Client;
+using IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Movies.Client.HttpHandlers;
+using System.Security.Claims;
 using WebApp.Client.ApiServices;
 using WebApp.Client.ApiServices.Interface;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -31,7 +34,6 @@ builder.Services.AddHttpClient("IDPClient", client =>
     client.DefaultRequestHeaders.Clear();
     client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
 });
-
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton(new ClientCredentialsTokenRequest
 {
@@ -53,8 +55,8 @@ builder.Services.AddAuthentication(options =>
         options.ClientId = "webapp_mvc_client";
         options.ClientSecret = "toiyeuem_secret";
         options.ResponseType = "code id_token";
-        //options.Scope.Add("openid");
-        //options.Scope.Add("profile");
+        options.Scope.Add("openid");
+        options.Scope.Add("profile");
         options.Scope.Add("address");
         options.Scope.Add("email");
         options.Scope.Add("roles");

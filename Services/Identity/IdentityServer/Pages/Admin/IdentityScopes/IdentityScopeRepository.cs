@@ -9,6 +9,7 @@ namespace IdentityServerHost.Pages.Admin.IdentityScopes;
 public class IdentityScopeSummaryModel
 {
     [Required]
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public string Name { get; set; }
     public string DisplayName { get; set; }
 }
@@ -28,7 +29,7 @@ public class IdentityScopeRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<IdentityScopeSummaryModel>> GetAllAsync(string filter = null)
+    public async Task<IEnumerable<IdentityScopeSummaryModel>> GetAllAsync(string ?filter = null)
     {
         var query = _context.IdentityResources
             .Include(x => x.UserClaims)
@@ -54,13 +55,13 @@ public class IdentityScopeRepository
             .Include(x => x.UserClaims)
             .SingleOrDefaultAsync(x => x.Name == id);
 
-        if (scope == null) return null;
+        if (scope == null) return null!;
 
         return new IdentityScopeModel
         {
             Name = scope.Name,
             DisplayName = scope.DisplayName,
-            UserClaims = scope.UserClaims.Any() ? scope.UserClaims.Select(x => x.Type).Aggregate((a, b) => $"{a} {b}") : null,
+            UserClaims = scope.UserClaims.Any() ? scope.UserClaims.Select(x => x.Type).Aggregate((a, b) => $"{a} {b}") : null!,
         };
     }
 
@@ -86,10 +87,7 @@ public class IdentityScopeRepository
     {
         var scope = await _context.IdentityResources
             .Include(x => x.UserClaims)
-            .SingleOrDefaultAsync(x => x.Name == model.Name);
-
-        if (scope == null) throw new Exception("Invalid Identity Scope");
-
+            .SingleOrDefaultAsync(x => x.Name == model.Name) ?? throw new Exception("Invalid Identity Scope");
         if (scope.DisplayName != model.DisplayName)
         {
             scope.DisplayName = model.DisplayName?.Trim();
@@ -118,10 +116,7 @@ public class IdentityScopeRepository
 
     public async Task DeleteAsync(string id)
     {
-        var scope = await _context.IdentityResources.SingleOrDefaultAsync(x => x.Name == id);
-
-        if (scope == null) throw new Exception("Invalid Identity Scope");
-
+        var scope = await _context.IdentityResources.SingleOrDefaultAsync(x => x.Name == id) ?? throw new Exception("Invalid Identity Scope");
         _context.IdentityResources.Remove(scope);
         await _context.SaveChangesAsync();
     }

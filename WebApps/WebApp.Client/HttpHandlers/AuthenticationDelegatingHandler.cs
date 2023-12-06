@@ -27,7 +27,7 @@ namespace Movies.Client.HttpHandlers
         {
             var accessToken = await _httpContextAccessor
                 .HttpContext!.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-
+            
             if (!string.IsNullOrWhiteSpace(accessToken))
             {
                 request.SetBearerToken(accessToken);

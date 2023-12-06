@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using WebApp.Client.ApiServices.Interface;
 using WebApp.Client.Models;
 
@@ -31,7 +34,6 @@ namespace WebApp.Client.ApiServices
         {
             throw new NotImplementedException();
         }
-
         public async Task<Coupon> GetDiscount(string productName)
         {
             var httpClient = _httpClientFactory.CreateClient("DiscountAPIClient");
@@ -62,7 +64,7 @@ namespace WebApp.Client.ApiServices
 
             var accessToken = await _httpContextAccessor
                 .HttpContext!.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-
+            
             var userInfoResponse = await idpClient.GetUserInfoAsync(
                new UserInfoRequest
                {

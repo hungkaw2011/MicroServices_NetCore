@@ -20,7 +20,12 @@ namespace IdentityServer
                         {
                             new Secret("toiyeuem_secret".Sha256())
                         },
-                        AllowedScopes = { "discountAPI" }
+                        AllowedScopes = { "discountAPI" },
+                        Claims = new List<ClientClaim>
+                        {
+                            new ClientClaim(JwtClaimTypes.Role,"User"),
+                            new ClientClaim(JwtClaimTypes.Role,"Admin")
+                        }
                    },
                    new Client
                    {

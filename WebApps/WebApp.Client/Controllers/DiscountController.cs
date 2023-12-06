@@ -26,7 +26,7 @@ namespace WebApp.Client.Controllers
             var userInfo = await _discountService.GetUserInfo();
             foreach (var item in userInfo.UserInfoDictionary)
             {
-                if (item.Key== "name")
+                if (item.Key == "name")
                 {
                     ViewBag.UserName = item.Value;
                     break;
@@ -45,6 +45,7 @@ namespace WebApp.Client.Controllers
                 Debug.WriteLine($"Claim type: {claim.Type} - Claim value: {claim.Value}");
             }
         }
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> OnlyAdmin()
         {
             var userInfo = await _discountService.GetUserInfo();
