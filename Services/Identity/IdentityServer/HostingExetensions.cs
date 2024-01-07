@@ -29,7 +29,7 @@ namespace IdentityServer
         public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddRazorPages();
-
+            builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -71,6 +71,14 @@ namespace IdentityServer
                                 await userManager.CreateAsync(user);
                             }
                             await userManager.AddToRolesAsync(user, roles);
+                            //var claims = new List<Claim>
+                            //{
+                            //    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                            //    new Claim(ClaimTypes.Name, user.UserName!),
+                            //    new Claim(ClaimTypes.Email, user.Email!)
+                            //};
+                            //claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+                            //context.Identity.AddClaims(claims);
                         }
                     };
                 })
@@ -116,9 +124,12 @@ namespace IdentityServer
                             var roles = new List<string> { "User" };
                             var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
                             var user = await userManager.FindByLoginAsync("Github", context.Principal!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                            if (!await userManager.IsInRoleAsync(user, "User"))
+                            if (user != null)
                             {
-                                await userManager.AddToRolesAsync(user, roles);
+                                if (!await userManager.IsInRoleAsync(user, "User"))
+                                {
+                                    await userManager.AddToRolesAsync(user, roles);
+                                }
                             }
                         }
                     };

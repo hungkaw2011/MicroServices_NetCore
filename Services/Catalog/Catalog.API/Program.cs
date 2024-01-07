@@ -1,7 +1,10 @@
 using Catalog.API.Data;
 using Catalog.API.Data.Interfaces;
+using Catalog.API.Entities.Vehicle;
 using Catalog.API.Repositories;
 using Catalog.API.Repositories.Interfaces;
+using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +14,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ICatalogContext,CatalogContext>();
-builder.Services.AddScoped<IProductRepository,ProductRepository>();
+builder.Services.AddScoped<ICatalogContext, CatalogContext>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IMotorcycleRepository, MotorcycleRepository>();
+builder.Services.AddScoped<IMongoCollection<Motorcycle>>((provider =>
+{
+    var connectionString = builder.Configuration.GetValue<string>("DatabaseSettings:ConnectionString");
+    var databaseName = builder.Configuration.GetValue<string>("DatabaseSettings:DatabaseName");
+    var client = new MongoClient(connectionString);
+    var database = client.GetDatabase(databaseName);
+    return database.GetCollection<Motorcycle>("Motorcycles");
+}));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

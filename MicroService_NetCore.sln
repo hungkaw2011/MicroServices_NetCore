@@ -56,6 +56,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount.API", "Services\Di
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealtimeChatService", "Services\Chat\RealtimeChatService\RealtimeChatService.csproj", "{1CB59FC4-8392-4DDD-A546-696337ABD637}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSPA.ReactJs", "WebApps\WebSPA.ReactJs\WebSPA.ReactJs.csproj", "{B28249A0-7FF7-48F5-8B7E-2C8A6BEC4E75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -118,6 +120,10 @@ Global
 		{1CB59FC4-8392-4DDD-A546-696337ABD637}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CB59FC4-8392-4DDD-A546-696337ABD637}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CB59FC4-8392-4DDD-A546-696337ABD637}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B28249A0-7FF7-48F5-8B7E-2C8A6BEC4E75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B28249A0-7FF7-48F5-8B7E-2C8A6BEC4E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B28249A0-7FF7-48F5-8B7E-2C8A6BEC4E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B28249A0-7FF7-48F5-8B7E-2C8A6BEC4E75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,6 +149,7 @@ Global
 		{8E569FE4-E931-40BD-ADF1-9B07A064F47D} = {0A4A425A-1625-4145-B919-333AC2A8A44F}
 		{2367C1AC-3A35-4587-B7B8-12B6CCF6A994} = {0F7DB7B9-856D-4CA8-8F4D-2E15EFCDCE65}
 		{1CB59FC4-8392-4DDD-A546-696337ABD637} = {3BDDE13E-E076-4063-983E-BD1493604697}
+		{B28249A0-7FF7-48F5-8B7E-2C8A6BEC4E75} = {0A4A425A-1625-4145-B919-333AC2A8A44F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F1266B3-7FD1-455D-9760-1BE2A0C477CB}

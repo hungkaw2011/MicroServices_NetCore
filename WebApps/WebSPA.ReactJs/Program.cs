@@ -1,22 +1,22 @@
-﻿using IdentityModel;
+using IdentityModel;
 using IdentityModel.Client;
-using IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
-using Movies.Client.HttpHandlers;
-using System.Security.Claims;
-using WebApp.Client.ApiServices;
-using WebApp.Client.ApiServices.Interface;
+using WebSPA.ReactJs.ApiServices;
+using WebSPA.ReactJs.ApiServices.Interface;
+using WebSPA.ReactJs.HttpHandlers;
+using WebSPA.ReactJs.Interface;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IDiscountApiService, DiscountApiService>();
+builder.Services.AddScoped<IAuthApiService, AuthApiService>();
 builder.Services.AddTransient<AuthenticationDelegatingHandler>();
 
 // http operations
@@ -42,11 +42,12 @@ builder.Services.AddSingleton(new ClientCredentialsTokenRequest
     ClientSecret = "toiyeuem_secret",
     Scope = "discountAPI"
 });
+#region AddAuthenticationService
 builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-    })
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+})
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
     {
@@ -77,14 +78,12 @@ builder.Services.AddAuthentication(options =>
             RoleClaimType = JwtClaimTypes.Role
         };
     });
-
-
+#endregion
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }

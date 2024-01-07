@@ -1,17 +1,94 @@
 ﻿using Catalog.API.Entities;
+using Catalog.API.Entities.Vehicle;
 using MongoDB.Driver;
 
 namespace Catalog.API.Data
 {
     public class CatalogContextSeed
     {
-        public static void SeedData(IMongoCollection<Product> productCollection)
+        public static void SeedData(IMongoCollection<Product> productCollection, IMongoCollection<Motorcycle> motorcycleCollection)
         {
             bool existProduct = productCollection.Find(p => true).Any();
             if (!existProduct)
             {
                 productCollection.InsertManyAsync(GetPreconfiguredProducts());
+                motorcycleCollection.InsertManyAsync(GetPreconfiguredMotorcycles());
             }
+        }
+        private static IEnumerable<Motorcycle> GetPreconfiguredMotorcycles()
+        {
+            return new List<Motorcycle>()
+            {
+                new Motorcycle
+                {
+                    Id = "6599e51ecd7b92b2400dc874",
+                    Status = "Used",
+                    Vehicle = new Vehicle
+                    {
+                        Name = "Honda CBR500R",
+                        Brand = "Honda",
+                        ManufacturingYear = 2020,
+                        Origin = "Japan",
+                        TransmissionType = "Manual",
+                        FuelType = "Gasoline",
+                        SeatingCapacity = 2
+                    },
+                    VehicleType = "",
+                    EngineCapacity = 0,
+                    LicensePlate = "",
+                    BodyType = "Sport",
+                    Version = "CBR500R",
+                    Color = "Red",
+                    KilometersDriven = 5000,
+                    Price = 70000000,
+                    
+                    MediaInfo = new MediaInfo
+                    {
+                        ImageUrl = "https://example.com/honda_cbr500r.jpg",
+                        VideoUrl = "https://example.com/honda_cbr500r.mp4"
+                    },
+                    ListingInfo = new ListingInfo
+                    {
+                        Title = "Honda CBR500R for Sale",
+                        Description = "Powerful sportbike with great handling."
+                    },
+                    Category = "Sportbike"
+                },
+                new Motorcycle
+                {
+                    Id = "6599e51ecd7b92b2400dc875",
+                    Status = "New",
+                    Vehicle = new Vehicle
+                    {
+                        Name = "Yamaha MT-09",
+                        Brand = "Yamaha",
+                        ManufacturingYear = 2021,
+                        Origin = "Japan",
+                        TransmissionType = "Manual",
+                        FuelType = "Gasoline",
+                        SeatingCapacity = 2
+                    },
+                    VehicleType = "",
+                    EngineCapacity = 0,
+                    LicensePlate = "",
+                    BodyType = "Naked",
+                    Version = "MT-09",
+                    Color = "Blue",
+                    KilometersDriven = 0,
+                    Price = 70000000,
+                    MediaInfo = new MediaInfo
+                    {
+                        ImageUrl = "https://example.com/yamaha_mt09.jpg",
+                        VideoUrl = "https://example.com/yamaha_mt09.mp4"
+                    },
+                    ListingInfo = new ListingInfo
+                    {
+                        Title = "Yamaha MT-09 for Sale",
+                        Description = "Naked bike with a powerful three-cylinder engine."
+                    },
+                    Category = "Naked Bike"
+                }
+            };
         }
 
         private static IEnumerable<Product> GetPreconfiguredProducts()
